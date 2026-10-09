@@ -2,7 +2,10 @@ use std::env;
 use std::fs;
 
 use crate::lex::Lexer;
+use crate::parse::Parser;
 mod lex;
+
+mod parse;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -17,7 +20,6 @@ fn main() {
 
     let mut lexer: Lexer = Lexer::new(&contents);
     lexer.lex();
-
 
     let mut errors = 0; for token in &lexer.result.tokens { 
         if let lex::TokenType::Illegal = token.token_type { 
@@ -34,10 +36,9 @@ fn main() {
         std::process::exit(1); 
     }
 
-    println!("{:#?}", lexer.result);
+    //println!("{:#?}", lexer.result);
 
-    //if let Err(error) = generate_object_file(contents) {
-    //    eprintln!("error: {error}");
-    //    std::process::exit(1);
-    //}
+    let mut parser: Parser = Parser::new(lexer.result.tokens);
+    parser.parse();
+    println!("{}", parser.result);
 }

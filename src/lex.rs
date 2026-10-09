@@ -7,7 +7,7 @@ pub struct Span {
 #[derive(Debug, Clone, PartialEq)]
 pub enum TokenType {
     EOF,
-    Plus, Minus, Asterisk, Slash,
+    Plus, Minus, Asterisk, Slash, Caret,
     LParen, RParen,
     Illegal,
 
@@ -20,6 +20,7 @@ pub const SINGLE_OP_CODES: &[(char, TokenType)] = &[
     ('-', TokenType::Minus),
     ('*', TokenType::Asterisk),
     ('/', TokenType::Slash),
+    ('^', TokenType::Caret),
     ('(', TokenType::LParen),
     (')', TokenType::RParen),
 ];
@@ -82,7 +83,7 @@ impl<'a> Lexer<'a> {
         if dot_count > 0 {
             if dot_count > 1 {
                 eprintln!(
-                    "Floating point value can't contain more than 1 dot: {}\n\tline: {} column: {}",
+                    "Floating point value can't contain more than 1 dot: '{}'\n\tline: {} column: {}",
                     v, self.span.line, self.span.column
                 );
                 return Token { token_type: TokenType::Illegal, span: self.span.clone() };
@@ -93,7 +94,7 @@ impl<'a> Lexer<'a> {
                 },
                 Err(e) => {
                     eprintln!(
-                        "Illegal float value: {}\n\t{}\n\tline: {} column: {}", 
+                        "Illegal float value: '{}'\n\t{}\n\tline: {} column: {}", 
                         v, e, self.span.line, self.span.column
                     );
                     return Token { token_type: TokenType::Illegal, span: self.span.clone() };
@@ -107,7 +108,7 @@ impl<'a> Lexer<'a> {
             },
             Err(e) => {
                 eprintln!(
-                    "Illegal integer value: {}\n\t{}\n\tline: {} column: {}", 
+                    "Illegal integer value: '{}'\n\t{}\n\tline: {} column: {}", 
                     v, e, self.span.line, self.span.column
                 );
                 return Token { token_type: TokenType::Illegal, span: self.span.clone() };
