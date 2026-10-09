@@ -83,7 +83,7 @@ impl Parser {
             lhs = Expression::Operation(op, vec![lhs, rhs]);
         }
 
-        println!("parsed expression: {}!", lhs);
+        //println!("parsed expression: {}!", lhs);
         lhs
     }
 
@@ -120,7 +120,7 @@ fn infix_binding_power(op: &Token) -> (f32, f32) {
     match &op.token_type {
         TokenType::Plus | TokenType::Minus => (1.0, 1.1),
         TokenType::Asterisk | TokenType::Slash => (2.0, 2.1),
-        TokenType::Caret => (3.0, 3.1),
+        TokenType::Caret => (3.1, 3.0),
         _ => panic!("Unknown operator: {:?}", op.token_type)
     }
 }

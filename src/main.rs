@@ -1,11 +1,13 @@
 use std::env;
 use std::fs;
 
+use crate::codegen::compile_expr;
 use crate::lex::Lexer;
 use crate::parse::Parser;
-mod lex;
 
+mod lex;
 mod parse;
+mod codegen;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -41,4 +43,8 @@ fn main() {
     let mut parser: Parser = Parser::new(lexer.result.tokens);
     parser.parse();
     println!("{}", parser.result);
+
+    if args.len() == 3 {
+        compile_expr(parser.result, codegen::OutputType::Obj((&args[2]).into()));
+    }
 }
